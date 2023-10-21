@@ -34,7 +34,12 @@
 }
 
 .flame-icon {
-  margin-right: 10px;
+  font-size: xx-large;
+}
+
+.series-counter {
+  font-weight: bold;
+  font-size: xx-large;
 }
 
 .action-button {

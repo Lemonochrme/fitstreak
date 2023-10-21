@@ -4,18 +4,33 @@ import './App.css';
 class App extends Component {
   constructor(props) {
     super(props);
+    // Essayez de charger les données sauvegardées depuis le localStorage
+    const savedProgress = localStorage.getItem('progress');
+    const initialProgress = savedProgress ? JSON.parse(savedProgress) : this.getInitialProgress();
     this.state = {
-      seriesDays: 0,
-      workoutTime: 0,
+      ...initialProgress,
       isTraining: false,
-      weeklyWorkoutTime: 0,
       manualInputTime: 0,
     };
   }
 
+  getInitialProgress = () => {
+    return {
+      seriesDays: 0,
+      workoutTime: 0,
+      weeklyWorkoutTime: 0,
+      lastUpdateDate: new Date().toDateString(),
+    };
+  };
+
+  saveProgressToLocalStorage = () => {
+    // Sauvegardez la progression actuelle dans le localStorage
+    localStorage.setItem('progress', JSON.stringify(this.state));
+  };
+
   startTraining = () => {
     if (!this.state.isTraining) {
-      this.setState({ isTraining: true, trainingTimeElapsed: 0 });
+      this.setState({ isTraining: true });
       this.trainingTimer = setInterval(this.incrementWorkoutTime, 1000);
     } else {
       this.stopTraining();
@@ -24,31 +39,49 @@ class App extends Component {
 
   stopTraining = () => {
     clearInterval(this.trainingTimer);
-    if (this.state.workoutTime >= 300) { // 5 minutes
-      this.setState((prevState) => ({
-        isTraining: false,
-        seriesDays: prevState.seriesDays + 1,
-        workoutTime: 0,
-        weeklyWorkoutTime: prevState.weeklyWorkoutTime + prevState.workoutTime,
-      }));
+    const currentDate = new Date().toDateString();
+    if (this.state.workoutTime >= 300) {
+      if (currentDate === this.state.lastUpdateDate) {
+        this.setState((prevState) => ({
+          isTraining: false,
+          seriesDays: prevState.seriesDays + 1,
+          workoutTime: 0,
+          weeklyWorkoutTime: prevState.weeklyWorkoutTime + prevState.workoutTime,
+        }));
+      } else {
+        this.setState({
+          isTraining: false,
+          seriesDays: 1,
+          workoutTime: 0,
+          weeklyWorkoutTime: this.state.workoutTime, // Utilisez this.state au lieu de prevState
+          lastUpdateDate: currentDate,
+        });
+      }
     } else {
       this.setState({ isTraining: false, workoutTime: 0 });
     }
+    // Après la mise à jour de la progression, sauvegardez-la dans le localStorage
+    this.saveProgressToLocalStorage();
   };
-
-  incrementWorkoutTime = () => {
-    this.setState((prevState) => ({
-      workoutTime: prevState.workoutTime + 1,
-      trainingTimeElapsed: prevState.trainingTimeElapsed + 1,
-    }));
-  };
-
+  
   manualInput = () => {
-    this.setState((prevState) => ({
-      seriesDays: prevState.seriesDays + 1,
-      weeklyWorkoutTime: prevState.weeklyWorkoutTime + this.state.manualInputTime,
-      manualInputTime: 0, // Réinitialise le champ de saisie
-    }));
+    const currentDate = new Date().toDateString();
+    if (currentDate === this.state.lastUpdateDate) {
+      this.setState((prevState) => ({
+        seriesDays: prevState.seriesDays + 1,
+        weeklyWorkoutTime: prevState.weeklyWorkoutTime + this.state.manualInputTime,
+        manualInputTime: 0, // Réinitialise le champ de saisie
+      }));
+    } else {
+      this.setState({
+        seriesDays: 1,
+        weeklyWorkoutTime: this.state.manualInputTime, // Utilisez this.state au lieu de prevState
+        manualInputTime: 0,
+        lastUpdateDate: currentDate,
+      });
+    }
+    // Après la mise à jour de la progression, sauvegardez-la dans le localStorage
+    this.saveProgressToLocalStorage();
   };
 
   render() {
@@ -67,8 +100,8 @@ class App extends Component {
           ) : (
             <>
               <div className="series-content">
-                <i className="flame-icon"></i>
-                <span>{this.state.seriesDays} </span>
+                <span className="flame-icon">🔥</span>
+                <span className="series-counter">{this.state.seriesDays} </span>
                 <span>jours d'affilé !</span>
               </div>
             </>
