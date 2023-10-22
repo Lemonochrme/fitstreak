@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import { Button, Dialog, Portal, TextInput, Provider } from 'react-native-paper';
+import { Button, Dialog, Portal, TextInput, Provider, Title } from 'react-native-paper';
 
 const App = () => {
   const [isRunning, setIsRunning] = useState(false);
@@ -70,17 +70,34 @@ const App = () => {
     return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${secondsLeft.toString().padStart(2, '0')}`;
   };
 
+  const motivationalQuotes = [
+    "La persévérance est la clé du succès.",
+    "Le secret du succès est de commencer.",
+    "Le succès n'est pas la clé du bonheur, le bonheur est la clé du succès.",
+    "La difficulté est l'excuse de l'histoire.",
+  ];
+
+  const getRandomQuote = () => {
+    const randomIndex = Math.floor(Math.random() * motivationalQuotes.length);
+    return motivationalQuotes[randomIndex];
+  };
+
   return (
     <Provider>
-      <View style={styles.container}>
+      <View style={styles.mainContainer}>
+        <Text style={styles.greetingText}>Bonjour Robin!</Text>
         <View style={styles.seriesContainer}>
           {series === 0 ? (
             <View style={styles.seriesTextContainer}>
-              <Text style={styles.seriesZeroText}>Nombre de jours</Text>
+              <Title style={styles.flameZeroText}>🔥</Title>
+              <Text style={styles.seriesZeroText}>Il est temps de s'y mettre cowboy</Text>
             </View>
           ) : (
             <Text style={styles.seriesText}>Série: {series}</Text>
           )}
+        </View>
+        <View style={styles.motivationalQuoteContainer}>
+          <Text style={styles.motivationalQuote}>{getRandomQuote()}</Text>
         </View>
         <View style={styles.timerContainer}>
           <Text style={styles.timerText}>{formatTime(time)}</Text>
@@ -91,8 +108,8 @@ const App = () => {
         </View>
         <Button
           mode="contained"
-          buttonColor="#F9AF5E"
-          textColor="#FFFF"
+          textColor='#ffff'
+          buttonColor='#F9AF5E'
           onPress={startStopTimer}
           onLongPress={handleLongPress}
           style={styles.startButton}
@@ -121,36 +138,55 @@ const App = () => {
 };
 
 const styles = StyleSheet.create({
-  container: {
+  mainContainer: {
     flex: 1,
     backgroundColor: '#2E3643',
-    justifyContent: 'center',
-    alignItems: 'center',
+    padding: '8%',
+  },
+  greetingText: {
+    textAlign: 'left',
+    color: 'white',
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginBottom: 20,
   },
   seriesContainer: {
     backgroundColor: '#465163',
     padding: 10,
-    paddingHorizontal: 20, // Ajout du padding horizontal
-    borderRadius: 8,
+    borderRadius: 16,
+    width: '100%',
+    height: '20%',
     marginBottom: 20,
-    width: 200, // Largeur constante
   },
   seriesTextContainer: {
-    backgroundColor: '#465163',
     padding: 10,
-    paddingHorizontal: 10,
-    borderRadius: 8,
+    borderRadius: 16,
+    display: 'flex',
   },
   seriesZeroText: {
     color: 'white',
-    fontSize: 24,
+    fontWeight: '600',
+    fontSize: 12,
+
+  },
+  flameZeroText: {
+    fontSize: 60,
   },
   seriesText: {
     color: 'white',
     fontSize: 24,
   },
+  motivationalQuoteContainer: {
+    padding: 10,
+    borderRadius: 16,
+    marginBottom: 20,
+  },
+  motivationalQuote: {
+    color: '#5F6E84',
+    fontSize: 18,
+    textAlign: 'center',
+  },
   timerContainer: {
-    backgroundColor: '#465163',
     padding: 20,
     borderRadius: 8,
   },
@@ -167,8 +203,6 @@ const styles = StyleSheet.create({
     fontSize: 24,
   },
   startButton: {
-    marginTop: 10,
-    width: 200,
   },
 });
 
