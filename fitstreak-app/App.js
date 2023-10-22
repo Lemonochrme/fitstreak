@@ -31,7 +31,7 @@ const App = () => {
       if (!lastSeriesDate || new Date().toDateString() !== lastSeriesDate) {
         // C'est un nouveau jour, incrémentez la série
         setLastSeriesDate(new Date().toDateString());
-        if (currentTime >= 300) {
+        if (currentTime >= 1) {
           setSeries(series + 1);
         }
       }
@@ -86,52 +86,64 @@ const App = () => {
     <Provider>
       <View style={styles.mainContainer}>
         <Text style={styles.greetingText}>Bonjour Robin!</Text>
-        <View style={styles.seriesContainer}>
-          {series === 0 ? (
-            <View style={styles.seriesTextContainer}>
-              <Title style={styles.flameZeroText}>🔥</Title>
-              <Text style={styles.seriesZeroText}>Il est temps de s'y mettre cowboy</Text>
-            </View>
-          ) : (
-            <Text style={styles.seriesText}>Série: {series}</Text>
-          )}
-        </View>
-        <View style={styles.motivationalQuoteContainer}>
-          <Text style={styles.motivationalQuote}>{getRandomQuote()}</Text>
-        </View>
-        <View style={styles.timerContainer}>
-          <Text style={styles.timerText}>{formatTime(time)}</Text>
-        </View>
-        <View style={styles.weekStats}>
-          <Text style={styles.statsText}>Statistiques</Text>
-          <Text style={styles.statsText}>{formatTime(weekTotal)}</Text>
-        </View>
-        <Button
-          mode="contained"
-          textColor='#ffff'
-          buttonColor='#F9AF5E'
-          onPress={startStopTimer}
-          onLongPress={handleLongPress}
-          style={styles.startButton}
-        >
-          {isRunning ? 'Arrêter' : 'Démarrer'}
-        </Button>
-        <Portal>
-          <Dialog visible={visible} onDismiss={() => setVisible(false)}>
-            <Dialog.Title>Entrée Manuelle</Dialog.Title>
-            <Dialog.Content>
-              <TextInput
-                label="Durée (en secondes)"
-                value={inputTime}
-                onChangeText={(text) => setInputTime(text)}
-                keyboardType="numeric"
-              />
-            </Dialog.Content>
-            <Dialog.Actions>
-              <Button onPress={handleInputTime}>Ajouter</Button>
-            </Dialog.Actions>
-          </Dialog>
-        </Portal>
+        
+        <view style={styles.contentContainer}>
+
+          <View style={styles.seriesContainer}>
+            {series === 0 ? (
+              <View style={styles.seriesTextContainer}>
+                <Title style={styles.flameZeroText}>🔥</Title>
+                <Text style={styles.seriesZeroText}>Il est temps de s'y mettre cowboy</Text>
+              </View>
+            ) : (
+              <Text style={styles.seriesText}>Tu es dans une série de {series} jours d’affilé !</Text>
+            )}
+          </View>
+          <View style={styles.motivationalQuoteContainer}>
+            <Text style={styles.motivationalQuote}>{getRandomQuote()}</Text>
+          </View>
+          <View style={styles.timerContainer}>
+            <Text style={styles.timerText}>{formatTime(time)}</Text>
+          </View>
+          <View style={styles.weekStats}>
+            <View style={styles.weekStats}>
+            {series === 0 ? (
+              <Text style={styles.statsText}>Démarrez un entrainement pour commencer une série.</Text>
+            ) : (
+              <Text style={styles.statsText}>Vous vous êtes entraîné {formatTime(weekTotal)} cette semaine</Text>
+            )}
+          </View>
+          </View>
+          <Portal>
+            <Dialog visible={visible} onDismiss={() => setVisible(false)}>
+              <Dialog.Title>Entrée Manuelle</Dialog.Title>
+              <Dialog.Content>
+                <TextInput
+                  label="Durée (en secondes)"
+                  value={inputTime}
+                  onChangeText={(text) => setInputTime(text)}
+                  keyboardType="numeric"
+                />
+              </Dialog.Content>
+              <Dialog.Actions>
+                <Button onPress={handleInputTime}>Ajouter</Button>
+              </Dialog.Actions>
+            </Dialog>
+          </Portal>
+        </view>
+
+        <view styles={styles.startButtonContainer}>
+          <Button
+              mode="contained"
+              textColor='#ffff'
+              buttonColor={isRunning ? '#D56B5D' : '#F9AF5E'}
+              onPress={startStopTimer}
+              onLongPress={handleLongPress}
+              style={styles.startButton}
+            >
+              {isRunning ? 'Arrêter' : 'Démarrer'}
+            </Button>
+        </view>
       </View>
     </Provider>
   );
@@ -140,8 +152,14 @@ const App = () => {
 const styles = StyleSheet.create({
   mainContainer: {
     flex: 1,
-    backgroundColor: '#2E3643',
+    backgroundColor: '#1C1C1C',
     padding: '8%',
+  },
+  contentContainer: { 
+    height: '100%',
+    flex: 1,  // Set contentContainer to flex 1 to make it take up the entire available space
+    justifyContent: 'center', // Center content vertically
+    alignItems: 'center', // Center content horizontally
   },
   greetingText: {
     textAlign: 'left',
@@ -151,11 +169,11 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   seriesContainer: {
-    backgroundColor: '#465163',
+    backgroundColor: '#393939',
     padding: 10,
     borderRadius: 16,
     width: '100%',
-    height: '20%',
+    height: '24%',
     marginBottom: 20,
   },
   seriesTextContainer: {
@@ -174,12 +192,14 @@ const styles = StyleSheet.create({
   },
   seriesText: {
     color: 'white',
+    fontWeight: 'bold',
     fontSize: 24,
   },
   motivationalQuoteContainer: {
     padding: 10,
     borderRadius: 16,
     marginBottom: 20,
+    height: 100,
   },
   motivationalQuote: {
     color: '#5F6E84',
@@ -189,6 +209,7 @@ const styles = StyleSheet.create({
   timerContainer: {
     padding: 20,
     borderRadius: 8,
+    alignItems: 'center',
   },
   timerText: {
     color: 'white',
@@ -200,7 +221,12 @@ const styles = StyleSheet.create({
   },
   statsText: {
     color: 'white',
-    fontSize: 24,
+    fontSize: 16,
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
+  startButtonContainer: {
+    padding: '100px',
   },
   startButton: {
   },
