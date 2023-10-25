@@ -1,5 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { View, StyleSheet, Button, Text, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, Text, TouchableOpacity, StatusBar } from 'react-native';
+import { NavigationContainer, DefaultTheme, DarkTheme } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+
 
 const StreakCard = ({ isStreak }) => {
   if (isStreak) {
@@ -20,7 +23,7 @@ const MainButton = ({ onPress, onLongPress }) => {
 const BasicTextContent = () => {
   return (
     <Text style={TextStyles.h2}>
-      Rien à voir ici. Démarre un entrainement pour commencer.
+      Rien à voir ici. Démarre un entraînement pour commencer.
     </Text>
   );
 }
@@ -33,10 +36,10 @@ const Colors = {
   BACKGROUND: '#1C1C1C',
   CONTRASTED_BACKGROUND: '#393939',
   TEXT: '#FFFFFF',
-  DIMMED_TEXT: '#7E7E7E', 
+  DIMMED_TEXT: '#7E7E7E',
 }
 
-const App = () => {
+const App = ({ navigation }) => {
   const [isStreak, setIsStreak] = useState(false);
 
   const handleStartWorkout = () => {
@@ -45,7 +48,7 @@ const App = () => {
 
   return (
     <View style={styles.MainContainer}>
-      
+
       <View style={styles.Header}>
         <Text style={TextStyles.h1}>Bienvenue !</Text>
         <StreakCard isStreak={isStreak} />
@@ -56,9 +59,18 @@ const App = () => {
       </View>
 
       <View style={styles.Footer}>
-        <MainButton onPress={handleStartWorkout} />
+        <MainButton onPress={() => navigation.navigate('ChronometerScreen')} />
       </View>
 
+    </View>
+  );
+};
+
+const ChronometerScreen = () => {
+  return (
+    <View style={styles.MainContainer}>
+      <Text style={TextStyles.h1}>Second Screen</Text>
+      {/* Add content for the second screen here */}
     </View>
   );
 };
@@ -69,7 +81,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: Colors.BACKGROUND,
     alignItems: 'center',
-    paddingHorizontal: 20, // Marge sur les côtés
+    paddingHorizontal: 20,
     justifyContent: 'flex-start',
   },
   Header: {
@@ -81,7 +93,6 @@ const styles = StyleSheet.create({
     flex: 4,
     width: '100%',
     justifyContent: 'center',
-    textAlign: 'center',
     alignItems: 'center',
   },
   Footer: {
@@ -89,7 +100,6 @@ const styles = StyleSheet.create({
     width: '100%',
     alignItems: 'center',
   },
-
   // Cards
   CardNoStreak: {
     flex: 1,
@@ -106,8 +116,8 @@ const styles = StyleSheet.create({
   MainButton: {
     backgroundColor: Colors.ORANGE,
     paddingHorizontal: 100,
-    paddingVertical: 10, 
-    borderRadius: 10, 
+    paddingVertical: 10,
+    borderRadius: 10,
   },
 });
 
@@ -127,4 +137,24 @@ const TextStyles = StyleSheet.create({
   },
 });
 
-export default App;
+const Stack = createStackNavigator();
+
+const FitstreakDarkTheme = { // Fix white screen during screen navigation transition.
+  ...DarkTheme,
+  colors: {
+    ...DarkTheme.colors,
+    background: Colors.BACKGROUND,
+  },
+};
+
+export default function MainApp() {
+  return (
+    <NavigationContainer theme={FitstreakDarkTheme}>
+      <StatusBar barStyle={'light-content'} backgroundColor={Colors.BACKGROUND} />
+      <Stack.Navigator initialRouteName="App">
+        <Stack.Screen name="App" component={App} options={{ headerShown: false }} />
+        <Stack.Screen name="ChronometerScreen" component={ChronometerScreen} />
+      </Stack.Navigator>
+    </NavigationContainer>
+  );
+}
