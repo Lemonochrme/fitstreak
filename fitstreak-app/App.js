@@ -19,10 +19,21 @@ const MainButton = ({ onPress, onLongPress }) => {
 
 const BasicTextContent = () => {
   return (
-    <Text style={TextStyles.h2} color='red'>
+    <Text style={TextStyles.h2}>
       Rien à voir ici. Démarre un entrainement pour commencer.
     </Text>
   );
+}
+
+const Colors = {
+  ORANGE: '#F9AF5E',
+  DIMMED_ORANGE: '#85613A',
+  RED: '#D56B5D',
+  GREEN: '7BC767',
+  BACKGROUND: '#1C1C1C',
+  CONTRASTED_BACKGROUND: '#393939',
+  TEXT: '#FFFFFF',
+  DIMMED_TEXT: '#7E7E7E', 
 }
 
 const App = () => {
@@ -56,7 +67,7 @@ const styles = StyleSheet.create({
   // Containers
   MainContainer: {
     flex: 1,
-    backgroundColor: '#1C1C1C',
+    backgroundColor: Colors.BACKGROUND,
     alignItems: 'center',
     paddingHorizontal: 20, // Marge sur les côtés
     justifyContent: 'flex-start',
@@ -69,6 +80,8 @@ const styles = StyleSheet.create({
   ContentContainer: {
     flex: 4,
     width: '100%',
+    justifyContent: 'center',
+    textAlign: 'center',
     alignItems: 'center',
   },
   Footer: {
@@ -81,17 +94,17 @@ const styles = StyleSheet.create({
   CardNoStreak: {
     flex: 1,
     width: '100%',
-    backgroundColor: '#393939',
+    backgroundColor: Colors.CONTRASTED_BACKGROUND,
     borderRadius: 20,
   },
   CardStreak: {
     flex: 1,
     width: '100%',
-    backgroundColor: '393939',
+    backgroundColor: Colors.CONTRASTED_BACKGROUND,
     borderRadius: 20,
   },
   MainButton: {
-    backgroundColor: 'orange',
+    backgroundColor: Colors.ORANGE,
     paddingHorizontal: 100,
     paddingVertical: 10, 
     borderRadius: 10, 
@@ -100,17 +113,17 @@ const styles = StyleSheet.create({
 
 const TextStyles = StyleSheet.create({
   h1: {
-    color: '#ffff',
+    color: Colors.TEXT,
     fontWeight: 'bold',
     fontSize: 30,
   },
   h2: {
-    color: '#ffff',
+    color: Colors.TEXT,
     fontSize: 20,
     fontWeight: 'bold',
   },
   h3: {
-    color: '#ffff',
+    color: Colors.TEXT,
   },
 });
 
