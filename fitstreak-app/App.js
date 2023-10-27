@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { View, StyleSheet, Text, TouchableOpacity, StatusBar, Button, TextInput, Vibration } from 'react-native';
+import { View, StyleSheet, Text, TouchableOpacity, StatusBar, Button, TextInput, Vibration, Image } from 'react-native';
 import { NavigationContainer, DefaultTheme, DarkTheme } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import moment from 'moment';
-
 
 /* ------------------- Logic ------------------- */
 
@@ -18,20 +17,28 @@ const StreakCard = ({ isStreak }) => {
   } else {
     return (
       <View style={styles.CardNoStreak}>
-        <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
-          <Text style={TextStyles.h1}>Hello</Text>
-          <Text style={TextStyles.h1}>Hello</Text>
+        <View style={{ flexDirection: 'row', justifyContent: 'center', flex: 1}}>
+          <View style={{ flex: 5 }}>
+            <Text style={TextStyles.h2}>IMG</Text>
+          </View>
+          <View style={{ flex: 10, backgroundColor: Colors.ORANGE }}>
+            <Text style={TextStyles.h2}>Il est temps de s'y mettre cowboy.</Text>
+            <Text style={TextStyles.h3}>Entraine toi deux jours consécutifs pour démarrer une série !</Text>
+          </View>
         </View>
 
-        <View style={styles.WeekStreakContainer}>
-          <View style={styles.WeekDay}></View>
-          <View style={styles.WeekDay}></View>
-          <View style={styles.WeekDay}></View>
-          <View style={styles.WeekDay}></View>
-          <View style={styles.WeekDay}></View>
-          <View style={styles.WeekDay}></View>
-          <View style={styles.WeekDay}></View>
+        <View style={{ alignItems: 'center', padding: 16 }}> 
+          <View style={styles.WeekStreakContainer}>
+            <View style={styles.WeekDay}></View>
+            <View style={styles.WeekDay}></View>
+            <View style={styles.WeekDay}></View>
+            <View style={styles.WeekDay}></View>
+            <View style={styles.WeekDay}></View>
+            <View style={styles.WeekDay}></View>
+            <View style={styles.WeekDay}></View>
+          </View>
         </View>
+
       </View>
     );
   }
@@ -256,13 +263,13 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     backgroundColor: Colors.DIMMED_TEXT,
     borderRadius: 100,
-    width: 240,
+    width: 325,
   },
   WeekDay: {
     width: 16,
     height: 16,
     backgroundColor: 'white',
-    marginHorizontal: 10,
+    marginHorizontal: 17,
     marginVertical: 4,
     borderRadius: 100,
   },
