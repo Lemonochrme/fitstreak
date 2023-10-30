@@ -176,8 +176,7 @@ const ChronometerScreen = () => {
       </View>
 
       <View style={styles.Footer}>
-        <Button title="Reset" onPress={() => { resetTimer(); handleOnpress(); }} />
-        <MainButton title={running ? 'Stop' : 'Start'} onPress={() => {toggleRunning(); handleOnpress(); }} color={running ? '#D56B5D' : '#7BC767'}/>
+        <MainButton title={running ? 'Stop' : 'Start'} onPress={() => {toggleRunning(); handleOnpress(); }} onLongPress={() => { resetTimer(); handleLongPress(); }} color={running ? '#D56B5D' : '#7BC767'}/>    
       </View>
 
     </View>
@@ -198,22 +197,34 @@ const ManualTimeEntryScreen =() => {
   };
 
   return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <Text>Saisissez du texte :</Text>
-      <TextInput
-        style={{
-          borderWidth: 1,
-          borderColor: 'gray',
-          width: 200,
-          height: 40,
-          paddingLeft: 10,
-          margin: 10,
-        }}
-        onChangeText={handleTextChange} // Appelé à chaque modification du texte
-        value={texteSaisi} // La valeur du champ de texte est liée à l'état
-        placeholder="Entrez du texte ici"
-      />
-      <Button title="Soumettre" onPress={handleSubmit} />
+    <View style={styles.MainContainer}>
+      <View styles={styles.Header}>
+        
+      </View>
+      
+      <View styles={styles.ContentContainer}>
+        <Text>Saisissez du texte :</Text>
+        <TextInput
+          style={{
+            borderWidth: 1,
+            borderColor: 'white',
+            backgroundColor: Colors.CONTRASTED_BACKGROUND,
+            borderRadius: 16,
+            width: 200,
+            height: 40,
+            paddingLeft: 10,
+            margin: 10,
+          }}
+          keyboardType="numeric"
+          onChangeText={handleTextChange} // Appelé à chaque modification du texte
+          value={texteSaisi} // La valeur du champ de texte est liée à l'état
+          placeholder="Entrez du texte ici"
+        />
+      </View>
+      
+      <View style={styles.Footer}> 
+        <MainButton title="Valider" onPress={() => {handleSubmit(); handleOnpress(); }} color={'#7BC767'} />
+      </View>
     </View>
   );
 };
