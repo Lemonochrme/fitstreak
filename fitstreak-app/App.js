@@ -4,6 +4,8 @@ import { View, StyleSheet, Text, TouchableOpacity, StatusBar, Button, TextInput,
 import { NavigationContainer, DefaultTheme, DarkTheme } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import moment from 'moment';
+import { ThemeColors } from 'react-navigation';
+
 
 /* ------------------- Logic ------------------- */
 
@@ -18,10 +20,10 @@ const StreakCard = ({ isStreak }) => {
     return (
       <View style={styles.CardNoStreak}>
         <View style={{ flexDirection: 'row', justifyContent: 'center', flex: 1}}>
-          <View style={{ flex: 5 }}>
-            <Text style={TextStyles.h2}>IMG</Text>
+          <View style={{ flex: 5, alignItems: 'center', justifyContent: 'center'  }}>
+            <Image source={require('./assets/nostreak.png')} />
           </View>
-          <View style={{ flex: 10, backgroundColor: Colors.ORANGE }}>
+          <View style={{ flex: 10, alignItems: 'center', justifyContent: 'center' }}>
             <Text style={TextStyles.h2}>Il est temps de s'y mettre cowboy.</Text>
             <Text style={TextStyles.h3}>Entraine toi deux jours consécutifs pour démarrer une série !</Text>
           </View>
@@ -183,7 +185,7 @@ const ChronometerScreen = () => {
   );
 };
 
-const ManualTimeEntryScreen =() => {
+const ManualTimeEntryScreen =({ navigation }) => {
   const [texteSaisi, setTexteSaisi] = useState('');
 
   // Cette fonction sera appelée lorsque le texte sera saisi
@@ -199,16 +201,15 @@ const ManualTimeEntryScreen =() => {
   return (
     <View style={styles.MainContainer}>
       <View styles={styles.Header}>
-        
+
       </View>
       
       <View styles={styles.ContentContainer}>
-        <Text>Saisissez du texte :</Text>
         <TextInput
           style={{
             borderWidth: 1,
             borderColor: 'white',
-            backgroundColor: Colors.CONTRASTED_BACKGROUND,
+            backgroundColor: Colors.TEXT,
             borderRadius: 16,
             width: 200,
             height: 40,
@@ -218,12 +219,12 @@ const ManualTimeEntryScreen =() => {
           keyboardType="numeric"
           onChangeText={handleTextChange} // Appelé à chaque modification du texte
           value={texteSaisi} // La valeur du champ de texte est liée à l'état
-          placeholder="Entrez du texte ici"
+          placeholder="Entrainement du jour en (s)"
         />
       </View>
       
-      <View style={styles.Footer}> 
-        <MainButton title="Valider" onPress={() => {handleSubmit(); handleOnpress(); }} color={'#7BC767'} />
+      <View style={styles.Footer}>
+        <MainButton title="Valider" onPress={() => {handleSubmit(); handleOnpress(); navigation.navigate('App'); }} color={'#7BC767'} />
       </View>
     </View>
   );
@@ -325,7 +326,7 @@ export default function MainApp() {
     <NavigationContainer theme={FitstreakDarkTheme}>
       <StatusBar barStyle={'light-content'} backgroundColor={Colors.BACKGROUND} />
       <Stack.Navigator initialRouteName="App" screenOptions={{ headerStyle: { backgroundColor: '#1C1C1C' } }}>
-        <Stack.Screen name="App" component={App} options={{ headerShown: false }} />
+        <Stack.Screen name="App" component={App} options={{ headerShown: true, title: 'Fitstreak' }} />
         <Stack.Screen name="ChronometerScreen" component={ChronometerScreen} options={{title: 'Entrainement'}} />
         <Stack.Screen name="ManualTimeEntryScreen" component={ManualTimeEntryScreen} options={{title: 'Entrée manuelle'}} />
       </Stack.Navigator>
